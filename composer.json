@@ -2,5 +2,11 @@
   "require": {
     "doctrine/dbal":"~2.2",
     "silex/silex": "~1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Api\\Models\\":        "src/models/",
+      "Api\\Controllers\\": "src/controllers/"
+    }
   }
 }

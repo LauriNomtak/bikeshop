@@ -1,15 +1,14 @@
 <?php
-
 /**
  * Created by PhpStorm.
  * User: Lauri
- * Date: 19.09.2016
- * Time: 14:16
+ * Date: 11.10.2016
+ * Time: 13:21
  */
+namespace Api\Models;
 
-class Bike
+class Store
 {
     public $id;
     public $name;
-    public $color;
 }
