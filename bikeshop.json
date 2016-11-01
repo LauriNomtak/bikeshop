@@ -2,7 +2,8 @@
     "swagger": "2.0",
     "info": {
         "version": "1.0.0",
-        "title": "Bikeshop"
+        "title": "Bikeshop",
+        "description": "\nResponse error codes: \n\n| Code  | Description |\n|-------|-------------|\n| 701   | Bike not found |\n| 702   | Store not found |\n| 703   | Request body missing parameters |\n| 704   | Bike not in stores |\n"
     },
     "host": "127.0.0.1",
     "basePath": "/",
@@ -18,7 +19,10 @@
     "paths": {
         "/bikes": {
             "get": {
-                "description": "Returns all bikes",
+                "tags": [
+                    "bike"
+                ],
+                "description": "Returns all bikes in database.",
                 "operationId": "findBikes",
                 "produces": [
                     "application/json"
@@ -42,7 +46,10 @@
                 }
             },
             "post": {
-                "description": "Creates a new bike in the store.",
+                "tags": [
+                    "bike"
+                ],
+                "description": "Creates a new bike in the database.",
                 "operationId": "addBike",
                 "produces": [
                     "application/json"
@@ -51,10 +58,10 @@
                     {
                         "name": "bike",
                         "in": "body",
-                        "description": "Bike to add to the store",
+                        "description": "Bike to add to the list",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/newBike"
+                            "$ref": "#/definitions/addUpdateBike"
                         }
                     }
                 ],
@@ -74,8 +81,11 @@
                 }
             }
         },
-        "/bikes/{id}": {
+        "/bikes/{bikeId}": {
             "get": {
+                "tags": [
+                    "bike"
+                ],
                 "description": "Returns a bike based on a single ID.",
                 "operationId": "findBikeById",
                 "produces": [
@@ -83,7 +93,7 @@
                 ],
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "bikeId",
                         "in": "path",
                         "description": "ID of bike to fetch",
                         "required": true,
@@ -107,11 +117,14 @@
                 }
             },
             "delete": {
-                "description": "deletes a single bike based on the ID supplied",
+                "tags": [
+                    "bike"
+                ],
+                "description": "Deletes a single bike from database based on the ID supplied.",
                 "operationId": "deleteBike",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "bikeId",
                         "in": "path",
                         "description": "ID of bike to delete",
                         "required": true,
@@ -120,7 +133,7 @@
                     }
                 ],
                 "responses": {
-                    "204": {
+                    "200": {
                         "description": "Bike deleted"
                     },
                     "default": {
@@ -132,12 +145,15 @@
                 }
             },
             "put": {
-                "description": "Updates a single bike base on the ID.",
+                "tags": [
+                    "bike"
+                ],
+                "description": "Updates a single bike in database.",
                 "operationId": "updateBike",
                 "parameters": [
                     {
                         "in": "path",
-                        "name": "id",
+                        "name": "bikeId",
                         "description": "ID of bike to update",
                         "required": true,
                         "type": "string"
@@ -148,7 +164,7 @@
                         "description": "New description of bike",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/newBike"
+                            "$ref": "#/definitions/addUpdateBike"
                         }
                     }
                 ],
@@ -157,6 +173,37 @@
                         "description": "Bike updated",
                         "schema": {
                             "$ref": "#/definitions/bike"
+                        }
+                    },
+                    "default": {
+                        "description": "unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/errorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/stores/{bikeId}": {
+            "get": {
+                "tags": [
+                    "store"
+                ],
+                "description": "Returns all stores that have this bike and their stock.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "bikeId",
+                        "description": "ID of bike",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Array of stores and stock",
+                        "schema": {
+                            "$ref": "#/definitions/bikeInStores"
                         }
                     },
                     "default": {
@@ -189,7 +236,7 @@
                 }
             }
         },
-        "newBike": {
+        "addUpdateBike": {
             "type": "object",
             "required": [
                 "name"
@@ -200,6 +247,17 @@
                 },
                 "color": {
                     "type": "string"
+                }
+            }
+        },
+        "bikeInStores": {
+            "type": "object",
+            "properties": {
+                "storeName": {
+                    "type": "string"
+                },
+                "stock": {
+                    "type": "integer"
                 }
             }
         },
